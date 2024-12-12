@@ -20,6 +20,10 @@ void print_list(const listint_t *list);
 
 /**
  * listint_t - Data structure for a doubly linked list node.
+ *
+ * @n: The integer value stored in the node.
+ * @prev: Pointer to the previous element in the list.
+ * @next: Pointer to the next element in the list.
  */
 typedef struct listint_s
 {
