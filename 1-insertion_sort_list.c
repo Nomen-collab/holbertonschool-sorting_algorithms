@@ -1,38 +1,30 @@
 #include "sort.h"
 
-/**
- * _swap - Swaps two nodes of doubly linked list
- *
- * @node: node base to change
- * @list: double link list head
- *
- * Return: No Return
- */
-void _swap(listint_t **node, listint_t **list)
+void swap_nodes(listint_t **current_node, listint_t **list_head)
 {
-	listint_t *tmp = *node, *tmp2, *tmp3;
+	listint_t *node_to_swap = *current_node, *next_node, *previous_node;
 
-	if (!(*node)->prev)
-		*list = (*node)->next;
+	if (!(*current_node)->prev)
+		*list_head = (*current_node)->next;
 
-	tmp = tmp3 = *node;
-	tmp2 = tmp->next;
+	node_to_swap = previous_node = *current_node;
+	next_node = node_to_swap->next;
 
-	tmp->next = tmp2->next;
-	tmp3 = tmp->prev;
-	tmp->prev = tmp2;
-	tmp2->next = tmp;
-	tmp2->prev = tmp3;
+	node_to_swap->next = next_node->next;
+	previous_node = node_to_swap->prev;
+	node_to_swap->prev = next_node;
+	next_node->next = node_to_swap;
+	next_node->prev = previous_node;
 
-	if (tmp2->prev)
-		tmp2->prev->next = tmp2;
+	if (next_node->prev)
+		next_node->prev->next = next_node;
 
+	if (node_to_swap->next)
+		node_to_swap->next->prev = node_to_swap;
 
-	if (tmp->next)
-		tmp->next->prev = tmp;
-
-	*node = tmp2;
+	*current_node = next_node;
 }
+
 /**
  * insertion_sort_list - sorts a doubly linked list of integers
  * in ascending order using the Insertion sort algorithm
@@ -43,39 +35,30 @@ void _swap(listint_t **node, listint_t **list)
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t  *head = *list, *tback, *aux;
+	listint_t *current_node = *list, *temp_node, *aux_node;
 
-	if (!head || (!(head->prev) && !(head->next)))
+	if (!current_node || (!(current_node->prev) && !(current_node->next)))
 		return;
 
-	while (head && head->next)
+	while (current_node && current_node->next)
 	{
-		if (head->n > head->next->n)
+		if (current_node->n > current_node->next->n)
 		{
-			aux = head;
+			aux_node = current_node;
 
-			_swap(&aux, list);
+			swap_nodes(&aux_node, list);
 			print_list(*list);
-			head = aux;
-			tback = aux;
 
-			while (tback && tback->prev)
+			while (aux_node->prev && aux_node->prev->n > aux_node->n)
 			{
-
-				if (tback->n < tback->prev->n)
-				{
-					aux = tback->prev;
-
-					_swap(&(aux), list);
-
-					print_list(*list);
-					tback = aux->next;
-				}
-
-				tback = tback->prev;
+				temp_node = aux_node->prev;
+				swap_nodes(&temp_node, list);
+				print_list(*list);
 			}
-
 		}
-		head = head->next;
+		else
+		{
+			current_node = current_node->next;
+		}
 	}
 }
