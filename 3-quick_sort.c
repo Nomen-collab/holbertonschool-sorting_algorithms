@@ -1,14 +1,32 @@
-#include "sort.h"
+#include <stdio.h>
+
+void print_array_b(const int *array, size_t size);
+int partition(int *array, int low, int high, size_t size);
+void quick_sort_recursive(int *array, int low, int high, size_t size);
 
 /**
- * partition - Partitions the array for quicksort
+ * quick_sort - Sorts an array of integers in ascending order using Quick sort
+ *
+ * @array: The array to sort
+ * @size: The size of the array
+ */
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size < 2)
+		return;
+
+	quick_sort_recursive(array, 0, size - 1, size);
+}
+
+/**
+ * partition - Partitions the array using the Lomuto partition scheme
  *
  * @array: The array to partition
- * @low: The starting index
- * @high: The ending index
+ * @low: The starting index of the partition
+ * @high: The ending index of the partition
  * @size: The size of the array
  *
- * Return: The partition index
+ * Return: The index of the pivot
  */
 int partition(int *array, int low, int high, size_t size)
 {
@@ -24,46 +42,51 @@ int partition(int *array, int low, int high, size_t size)
 			temp = array[i];
 			array[i] = array[j];
 			array[j] = temp;
-			print_array(array, size);
+			print_array_b(array, size);
 		}
 	}
 	temp = array[i + 1];
 	array[i + 1] = array[high];
 	array[high] = temp;
-	print_array(array, size);
+	print_array_b(array, size);
 
 	return (i + 1);
 }
 
 /**
- * quick_sort_rec - Recursively sorts the array using quicksort
+ * quick_sort_recursive - Recursively sorts the array using Quick sort
  *
  * @array: The array to sort
- * @low: The starting index
- * @high: The ending index
+ * @low: The starting index of the partition
+ * @high: The ending index of the partition
  * @size: The size of the array
  */
-void quick_sort_rec(int *array, int start_index, int end_index, size_t size)
+void quick_sort_recursive(int *array, int low, int high, size_t size)
 {
-	if (start_index < end_index)
+	if (low < high)
 	{
-		int partition_index = partition(array, start_index, end_index, size);
-		quick_sort_rec(array, start_index, partition_index - 1, size);
-		quick_sort_rec(array, partition_index + 1, end_index, size);
+		int partition_index = partition(array, low, high, size);
+
+		quick_sort_recursive(array, low, partition_index - 1, size);
+		quick_sort_recursive(array, partition_index + 1, high, size);
 	}
-	}
+}
 
 /**
- * quick_sort - Sorts an array of integers
- * in ascending order using Quick sort
+ * print_array_b - Prints an array of integers
  *
- * @array: The array to sort
+ * @array: The array to be printed
  * @size: The size of the array
  */
-void quick_sort(int *array, size_t size)
+void print_array_b(const int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
+	size_t i;
 
-	quick_sort_rec(array, 0, size - 1, size);
+	for (i = 0; i < size; i++)
+	{
+		if (i > 0)
+			printf(", ");
+		printf("%d", array[i]);
+	}
+	printf("\n");
 }
