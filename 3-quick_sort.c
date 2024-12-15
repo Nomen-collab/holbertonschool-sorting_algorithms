@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include "sort.h"
 
-void print_array_b(const int *array, size_t size);
 int partition(int *array, int low, int high, size_t size);
 void quick_sort_recursive(int *array, int low, int high, size_t size);
+void _swap(int *array, int i, int j, int size);
 
 /**
  * quick_sort - Sorts an array of integers in ascending order using Quick sort
@@ -19,45 +20,56 @@ void quick_sort(int *array, size_t size)
 }
 
 /**
- * partition - Partitions the array using the Lomuto partition scheme
+ * _swap - swaps two values in an array
  *
- * @array: The array to partition
- * @low: The starting index of the partition
- * @high: The ending index of the partition
- * @size: The size of the array
+ * @array: data to sort
+ * @i: first value
+ * @j: second value
+ * @size: size of data
  *
- * Return: The index of the pivot
+ * Return: No Return
  */
-int partition(int *array, int low, int high, size_t size)
+void _swap(int *array, int i, int j, int size)
 {
-	int pivot = array[high];
-	int i = low - 1;
-	int j, temp;
+	int tmp;
 
-	for (j = low; j < high; j++)
+	if (array[i] != array[j])
+	{
+		tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+		print_array(array, size);
+	}
+}
+
+/**
+ * partition - sorts a partition of data in relation to a pivot
+ *
+ * @array: data to sort
+ * @min: Left wall
+ * @max: right wall
+ * @size: size of data
+ *
+ * Return: New Pivot
+ */
+int partition(int *array, int min, int max, size_t size)
+{
+	int i = min, j, pivot  = array[max];
+
+	for (j = min; j <= max; j++)
 	{
 		if (array[j] < pivot)
 		{
+			_swap(array, i, j, size);
 			i++;
-			if (i != j)
-			{
-				temp = array[i];
-				array[i] = array[j];
-				array[j] = temp;
-				print_array_b(array, size);
-			}
 		}
-	}
-	if (i + 1 != high)
-	{
-		temp = array[i + 1];
-		array[i + 1] = array[high];
-		array[high] = temp;
-		print_array_b(array, size);
-	}
 
-	return (i + 1);
+	}
+	_swap(array, i, max, size);
+
+	return (i);
 }
+
 
 /**
  * quick_sort_recursive - Recursively sorts the array using Quick sort
@@ -76,23 +88,4 @@ void quick_sort_recursive(int *array, int low, int high, size_t size)
 		quick_sort_recursive(array, low, partition_index - 1, size);
 		quick_sort_recursive(array, partition_index + 1, high, size);
 	}
-}
-
-/**
- * print_array_b - Prints an array of integers
- *
- * @array: The array to be printed
- * @size: The size of the array
- */
-void print_array_b(const int *array, size_t size)
-{
-	size_t i;
-
-	for (i = 0; i < size; i++)
-	{
-		if (i > 0)
-			printf(", ");
-		printf("%d", array[i]);
-	}
-	printf("\n");
 }
