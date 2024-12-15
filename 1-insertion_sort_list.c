@@ -1,5 +1,16 @@
 #include "sort.h"
 
+
+/**
+ * swap_nodes - Swaps a node with its next node in a doubly linked list.
+ * @current_node: Double pointer to the current node to be swapped.
+ * @list_head: Double pointer to the head of the list.
+ *
+ * This function swaps the position of the current node with its next node
+ * in a doubly linked list. It updates the pointers of the involved nodes
+ * to maintain the list integrity. If the current node is the head of the
+ * list, the head pointer is updated accordingly.
+ */
 void swap_nodes(listint_t **current_node, listint_t **list_head)
 {
 	listint_t *node_to_swap = *current_node, *next_node, *previous_node;
