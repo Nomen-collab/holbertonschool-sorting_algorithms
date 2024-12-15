@@ -32,7 +32,6 @@ void _swap(listint_t **node, listint_t **list)
 		tmp->next->prev = tmp;
 
 	*node = tmp2;
-
 }
 /**
  * insertion_sort_list - sorts a doubly linked list of integers
